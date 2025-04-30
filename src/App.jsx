@@ -1,11 +1,12 @@
+import { ChatPane } from "./components/ChatPane"
+import { VisualPane } from "./components/VisualPane"
 
 function App() {
 
   return (
-    <div>
-      <h1 class="text-2xl font-medium">
-        Hello world!
-      </h1>
+    <div className="grid grid-cols-2 min-h-screen divide-x">
+      <ChatPane/>
+      <VisualPane/>
     </div>
   )
 }
