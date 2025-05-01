@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Send, MapPin} from 'lucide-react';
+import { Send, MapPin } from 'lucide-react';
 
 const BotMessage = ({ message }) => (
     <div className="flex gap-3 mb-4">
@@ -27,12 +27,12 @@ const UserMessage = ({ message }) => (
     </div>
 );
 
-export const ChatPane = () => {
+export const ChatPane = ({ destination,setDestination }) => {
     const [messages, setMessages] = useState([]);
     const [userInput, setUserInput] = useState('');
-    const [destination, setDestination] = useState('');
+
     const [stage, setStage] = useState(0);
-    const inputRef=useRef(null);
+    const inputRef = useRef(null);
 
     const initialMessage = "Hi! I'm your travel buddy 😄\n\nBased on your interests in adventure, culture, and history, I have 2 awesome activity suggestions:\n\nTokyo: 🏎️ Go-Karting in Shibuya at night (Adventure + Fun!)\nKyoto: 🍵 Traditional Tea Ceremony in a historic Gion teahouse (Culture + History!)\n\nWhich one sounds more exciting to you?\nEnter 1 for Tokyo, 2 for Kyoto";
 
@@ -66,6 +66,7 @@ export const ChatPane = () => {
             } else if (userInput === '2') {
                 newBotMessage.content = 'No problem! Let\'s start over.\n\n' + initialMessage;
                 setStage(0);
+                setDestination('');
             } else {
                 newBotMessage.content = 'Please enter 1 to confirm or 2 to cancel';
             }
@@ -78,10 +79,10 @@ export const ChatPane = () => {
         setMessages([{ type: 'bot', content: initialMessage }]);
     }, []);
     useEffect(() => {
-		if (inputRef.current) {
-			inputRef.current.scrollIntoView({ behavior: 'smooth' })
-		}
-	}, [messages])
+        if (inputRef.current) {
+            inputRef.current.scrollIntoView({ behavior: 'smooth' })
+        }
+    }, [messages])
 
     return (
         <div className="flex flex-col h-screen p-4">
@@ -89,10 +90,10 @@ export const ChatPane = () => {
                 <MapPin className="h-5 w-5 text-blue-600" />
                 <h1 className="text-xl font-semibold">Travel Planner</h1>
             </div>
-            
+
             <div className="flex-1 overflow-y-auto mb-4">
                 {messages.map((message, index) => (
-                    message.type === 'bot' ? 
+                    message.type === 'bot' ?
                         <BotMessage key={index} message={message.content} /> :
                         <UserMessage key={index} message={message.content} />
                 ))}
