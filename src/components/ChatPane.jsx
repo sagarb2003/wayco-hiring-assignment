@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Send, MapPin} from 'lucide-react';
 
 const BotMessage = ({ message }) => (
@@ -32,6 +32,7 @@ export const ChatPane = () => {
     const [userInput, setUserInput] = useState('');
     const [destination, setDestination] = useState('');
     const [stage, setStage] = useState(0);
+    const inputRef=useRef(null);
 
     const initialMessage = "Hi! I'm your travel buddy 😄\n\nBased on your interests in adventure, culture, and history, I have 2 awesome activity suggestions:\n\nTokyo: 🏎️ Go-Karting in Shibuya at night (Adventure + Fun!)\nKyoto: 🍵 Traditional Tea Ceremony in a historic Gion teahouse (Culture + History!)\n\nWhich one sounds more exciting to you?\nEnter 1 for Tokyo, 2 for Kyoto";
 
@@ -73,9 +74,14 @@ export const ChatPane = () => {
         setMessages([...messages, newUserMessage, newBotMessage]);
         setUserInput('');
     };
-    useState(() => {
+    useEffect(() => {
         setMessages([{ type: 'bot', content: initialMessage }]);
     }, []);
+    useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.scrollIntoView({ behavior: 'smooth' })
+		}
+	}, [messages])
 
     return (
         <div className="flex flex-col h-screen p-4">
@@ -90,6 +96,7 @@ export const ChatPane = () => {
                         <BotMessage key={index} message={message.content} /> :
                         <UserMessage key={index} message={message.content} />
                 ))}
+                <div ref={inputRef} />
             </div>
 
             <form onSubmit={handleSubmit} className="flex gap-2 items-center">

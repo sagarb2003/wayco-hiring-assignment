@@ -1,6 +1,37 @@
 import { Star, Heart, Building, Info } from "lucide-react";
 
-export const VisualPane = () => {
+const defaultVisual = () => {
+    return (
+        <div className="flex flex-col items-center justify-center p-8 rounded-lg shadow-lg">
+            <div className="w-64 h-64 mb-8 transform hover:scale-105 transition-transform duration-300">
+                <img 
+                    src="https://cdn3d.iconscout.com/3d/premium/thumb/man-greeting-saying-namaste-with-his-hands-3d-illustration-download-in-png-blend-fbx-gltf-file-formats--doing-welcome-say-presentation-pack-people-illustrations-5686259.png" 
+                    alt="Travel Guide Avatar"
+                    className="w-full h-full object-contain"
+                />
+            </div>
+            <h1 className="text-4xl font-bold text-gray-800 mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+                Welcome to Your Travel Journey!
+            </h1>
+            <p className="text-lg text-gray-600 text-center max-w-2xl leading-relaxed px-4 animate-fade-in">
+                I'm your personal travel companion, ready to help you discover amazing destinations tailored to your preferences. Let's explore the world together through our interactive chat and find your perfect adventure!
+            </p>
+            <div className="mt-8 flex gap-3">
+                <div className="px-4 py-2 bg-blue-100 rounded-full text-blue-600 font-medium">
+                    🌍 Explore Destinations
+                </div>
+                <div className="px-4 py-2 bg-purple-100 rounded-full text-purple-600 font-medium">
+                    💬 Start Chat
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export const VisualPane = ({destination}) => {
+    if(!destination){
+        return defaultVisual();
+    }
     return (
         <div className="rounded-lg overflow-hidden shadow-md bg-white">
             <div className="h-[55vh]">
@@ -11,7 +42,7 @@ export const VisualPane = () => {
                 />
             </div>
             <div className="p-4">
-                <h1 className="text-3xl font-bold mb-2">Grand Place</h1>
+                <h1 className="text-3xl font-bold mb-2">Tokyo</h1>
                 <div className="flex items-center gap-2 text-gray-600 mb-2">
                     <div className="flex items-center">
                         <Star className="h-5 w-5 fill-current text-yellow-500" />
@@ -20,7 +51,7 @@ export const VisualPane = () => {
                     <span className="text-gray-400">•</span>
                     <span>202k reviews</span>
                     <span className="text-gray-400">•</span>
-                    <span>Brussels, Brussel</span>
+                    <span>Shibuya , Tokyo</span>
                 </div>
                 <div className="flex items-center gap-1 text-gray-600 mb-3">
                     <Building className="h-4 w-4" />
