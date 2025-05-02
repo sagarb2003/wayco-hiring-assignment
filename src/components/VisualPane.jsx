@@ -1,6 +1,6 @@
 import { Star, Heart, Building, Info } from "lucide-react";
 
-const defaultVisual = () => {
+const DefaultVisual = () => {
     return (
         <div className="flex flex-col items-center justify-center p-8 rounded-lg shadow-lg">
             <div className="w-64 h-64 mb-8 transform hover:scale-105 transition-transform duration-300">
@@ -28,7 +28,7 @@ const defaultVisual = () => {
     );
 };
 
-const tokyoVisual = () => (
+const TokyoVisual = () => (
     <div className="rounded-lg overflow-hidden shadow-md bg-white">
         <div className="h-[55vh]">
             <img
@@ -81,7 +81,7 @@ const tokyoVisual = () => (
     </div>
 );
 
-const kyotoVisual = () => (
+const KyotoVisual = () => (
     <div className="rounded-lg overflow-hidden shadow-md bg-white">
         <div className="h-[55vh]">
             <img
@@ -136,13 +136,13 @@ const kyotoVisual = () => (
 
 export const VisualPane = ({ destination }) => {
     if (!destination) {
-        return defaultVisual();
+        return <DefaultVisual />;
     }
     if (destination === 'Tokyo') {
-        return tokyoVisual();
+        return <TokyoVisual />;
     }
     if (destination === 'Kyoto') {
-        return kyotoVisual();
+        return <KyotoVisual />;
     }
-    return defaultVisual();
+    return <DefaultVisual />;
 }

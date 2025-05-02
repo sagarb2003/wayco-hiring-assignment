@@ -30,15 +30,20 @@ const UserMessage = ({ message }) => (
 export const ChatPane = ({ destination,setDestination }) => {
     const [messages, setMessages] = useState([]);
     const [userInput, setUserInput] = useState('');
+    const STAGES = {
+        INITIAL: 0,
+        CONFIRMING: 1,
+        COMPLETED: 2,
+      };
 
-    const [stage, setStage] = useState(0);
+    const [stage, setStage] = useState(STAGES.INITIAL);
     const inputRef = useRef(null);
 
-    const initialMessage = "Hi! I'm your travel buddy 😄\n\nBased on your interests in adventure, culture, and history, I have 2 awesome activity suggestions:\n\nTokyo: 🏎️ Go-Karting in Shibuya at night (Adventure + Fun!)\nKyoto: 🍵 Traditional Tea Ceremony in a historic Gion teahouse (Culture + History!)\n\nWhich one sounds more exciting to you?\nEnter 1 for Tokyo, 2 for Kyoto";
+    const initialMessage = "Hi! I'm your travel buddy 😄\n\nBased on your interests in adventure, culture, and history, I have 2 awesome activity suggestions:\n\nTokyo: 🏎️ Go-Karting in Shibuya at night (Adventure + Fun!)\nKyoto: 🍵 Traditional Tea Ceremony in a historic Gion teahouse (Culture + History!)\n\n✨ Where would you like to go?\n\nPress 1️⃣ for Tokyo 🏎️\nPress 2️⃣ for Kyoto 🍵";
 
-    const tokyoItinerary = `Awesome! Here's a recommended 4-day itinerary 🌏:\n\nDay 1:\n✈️ Arrive Tokyo, explore Shibuya Crossing 🏙️, enjoy Go-Karting 🏎️🎌\n\nDay 2:\n🛕 Visit Asakusa Temple, Tokyo Skytree 🗼, shop Akihabara 🛍️🎮\n\nDay 3:\n🚅 Travel Kyoto, explore Fushimi Inari Shrine ⛩️, tea ceremony 🍵\n\nDay 4:\n🎋 Arashiyama Bamboo Grove, visit Kinkaku-ji 🏯, return Tokyo 🧳\n\nWould you like to confirm these activities for your trip?\nPress 1 for confirm or 2 for cancel`;
+    const tokyoItinerary = `Awesome! Here's a recommended 4-day itinerary 🌏:\n\nDay 1:\n✈️ Arrive Tokyo, explore Shibuya Crossing 🏙️, enjoy Go-Karting 🏎️🎌\n\nDay 2:\n🛕 Visit Asakusa Temple, Tokyo Skytree 🗼, shop Akihabara 🛍️🎮\n\nDay 3:\n🚅 Travel Kyoto, explore Fushimi Inari Shrine ⛩️, tea ceremony 🍵\n\nDay 4:\n🎋 Arashiyama Bamboo Grove, visit Kinkaku-ji 🏯, return Tokyo 🧳\n\nWould you like to confirm these activities for your trip?\n\nPress 1️⃣ to Confirm ✅\nPress 2️⃣ to Cancel ❌`;
 
-    const kyotoItinerary = `Perfect choice! Here's a recommended 4-day itinerary 🌏:\n\nDay 1:\n🚅 Arrive Kyoto, visit Kiyomizu-dera Temple 🛕, stroll Higashiyama streets\n\nDay 2:\n⛩️ Explore Fushimi Inari Shrine, hike torii trail, taste local sweets\n\nDay 3:\n🌸 Visit Arashiyama Bamboo Grove 🎋, see monkeys 🐒, relax by river\n\nDay 4:\n🍵 Tea Ceremony in Gion teahouse 🎐, explore Nishiki Market 🍱🛍️\n\nWould you like to confirm these activities for your trip?\nPress 1 for confirm or 2 for cancel`;
+    const kyotoItinerary = `Perfect choice! Here's a recommended 4-day itinerary 🌏:\n\nDay 1:\n🚅 Arrive Kyoto, visit Kiyomizu-dera Temple 🛕, stroll Higashiyama streets\n\nDay 2:\n⛩️ Explore Fushimi Inari Shrine, hike torii trail, taste local sweets\n\nDay 3:\n🌸 Visit Arashiyama Bamboo Grove 🎋, see monkeys 🐒, relax by river\n\nDay 4:\n🍵 Tea Ceremony in Gion teahouse 🎐, explore Nishiki Market 🍱🛍️\n\nWould you like to confirm these activities for your trip?\n\nPress 1️⃣ to Confirm ✅\nPress 2️⃣ to Cancel ❌`;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -47,34 +52,35 @@ export const ChatPane = ({ destination,setDestination }) => {
         const newUserMessage = { type: 'user', content: userInput };
         let newBotMessage = { type: 'bot', content: '' };
 
-        if (stage === 0) {
+        if (stage === STAGES.INITIAL) {
             if (userInput === '1') {
                 newBotMessage.content = tokyoItinerary;
                 setDestination('Tokyo');
-                setStage(1);
+                setStage(STAGES.CONFIRMING);
             } else if (userInput === '2') {
                 newBotMessage.content = kyotoItinerary;
                 setDestination('Kyoto');
-                setStage(1);
+                setStage(STAGES.CONFIRMING);
             } else {
-                newBotMessage.content = 'Please enter 1 for Tokyo or 2 for Kyoto';
+                newBotMessage.content = 'Wrong Input \n Please enter 1 for Tokyo or 2 for Kyoto';
             }
-        } else if (stage === 1) {
+        } else if (stage === STAGES.CONFIRMING) {
             if (userInput === '1') {
                 newBotMessage.content = `Yay! 🎉 Your 4-day trip is now planned.\nHave a fantastic trip to ${destination} ✨`;
-                setStage(2);
+                setStage(STAGES.COMPLETED);
             } else if (userInput === '2') {
                 newBotMessage.content = 'No problem! Let\'s start over.\n\n' + initialMessage;
-                setStage(0);
+                setStage(STAGES.INITIAL);
                 setDestination('');
             } else {
-                newBotMessage.content = 'Please enter 1 to confirm or 2 to cancel';
+                newBotMessage.content = 'Wrong Input \n Please enter 1 to confirm or 2 to cancel';
             }
         }
 
         setMessages([...messages, newUserMessage, newBotMessage]);
         setUserInput('');
     };
+    // console.log("messages",messages)
     useEffect(() => {
         setMessages([{ type: 'bot', content: initialMessage }]);
     }, []);
@@ -91,7 +97,7 @@ export const ChatPane = ({ destination,setDestination }) => {
                 <h1 className="text-xl font-semibold">Travel Planner</h1>
             </div>
 
-            <div className="flex-1 overflow-y-auto mb-4">
+            <div className="flex-1 overflow-y-auto">
                 {messages.map((message, index) => (
                     message.type === 'bot' ?
                         <BotMessage key={index} message={message.content} /> :
@@ -107,12 +113,12 @@ export const ChatPane = ({ destination,setDestination }) => {
                     onChange={(e) => setUserInput(e.target.value)}
                     placeholder="Type 1 or 2..."
                     className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    disabled={stage === 2}
+                    disabled={stage === STAGES.COMPLETED}
                 />
                 <button
                     type="submit"
                     className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                    disabled={!userInput.trim() || stage === 2}
+                    disabled={!userInput.trim() || stage === STAGES.COMPLETED}
                 >
                     <Send className="h-5 w-5" />
                 </button>
